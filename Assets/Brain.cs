@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class Brain : MonoBehaviour
 {
-    [SerializeField] private GameObject playingPanel, selectionPanel, winPanel, losePanel;
+    [SerializeField] private GameObject playingPanel, selectionPanel, winPanel, losePanel, finalPanel;
 
     public TextMeshProUGUI pregunta, respuesta;
     private Node[] nodos = new Node[47];
@@ -30,7 +30,7 @@ public class Brain : MonoBehaviour
         nodos[10] = new Node(false, "PIERDE UN BRAZO", null);
         nodos[11] = new Node(true, null, "GOHAN DEL FUTURO");
         nodos[12] = new Node(true, null, "GOHAN ADULTO");
-        nodos[13] = new Node(false, "ES UNA FUSIÓN", null);
+        nodos[13] = new Node(false, "ES UNA FUSIÓN DE SAIYAJINES", null);
         nodos[14] = new Node(false, "USA LOS ZARCILLOS POTARA", null);
         nodos[15] = new Node(true, null, "VEGETTO");
         nodos[16] = new Node(false, "ES LA FUSION DE GOTEN Y TRUNKS", null);
@@ -149,10 +149,6 @@ public class Brain : MonoBehaviour
         {
             respuesta.text = nodoActual.answer;
         }
-        else
-        {
-            respuesta.text = "pensando...";
-        }
     }
 
     public void RecorrerNodoDerecha()
@@ -161,17 +157,22 @@ public class Brain : MonoBehaviour
         nodoActual = nodoActual.Derecho;
         if (nodoActual.endNode)
         {
-            if (nodoActual.answer == correctAnswer)
-            {
-                playingPanel.gameObject.SetActive(false);
-                winPanel.gameObject.SetActive(true);
-            }
-            else
-            {
-                playingPanel.gameObject.SetActive(false);
-                losePanel.gameObject.SetActive(true);
-            }
+            respuesta.text = nodoActual.answer;
+            playingPanel.gameObject.SetActive(false);
+            finalPanel.gameObject.SetActive(true);
         }
+    }
+
+    public void Equivocarse()
+    {
+        finalPanel.gameObject.SetActive(false);
+        losePanel.gameObject.SetActive(true);
+    }
+
+    public void Correcto()
+    {
+        finalPanel.gameObject.SetActive(false);
+        winPanel.gameObject.SetActive(true);
     }
 
     public void RecorrerNodoIzquierda()
@@ -179,16 +180,9 @@ public class Brain : MonoBehaviour
         nodoActual = nodoActual.Izquierdo;
         if (nodoActual.endNode)
         {
-            if (nodoActual.answer == correctAnswer)
-            {
-                playingPanel.gameObject.SetActive(false);
-                winPanel.gameObject.SetActive(true);
-            }
-            else
-            {
-                playingPanel.gameObject.SetActive(false);
-                losePanel.gameObject.SetActive(true);
-            }
+            respuesta.text = nodoActual.answer;
+            playingPanel.gameObject.SetActive(false);
+            finalPanel.gameObject.SetActive(true);
         }
     }
 
@@ -196,7 +190,6 @@ public class Brain : MonoBehaviour
     {
         selectionPanel.gameObject.SetActive(false);
         playingPanel.gameObject.SetActive(true);
-        correctAnswer = character;
     }
 
     public void Replay()
